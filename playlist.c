@@ -225,3 +225,84 @@ void exibirMenu(Musica *musicaAtual) {
         printf("\nNenhuma musica esta tocando no momento.\n");
     }
 }
+
+int main() {
+    Playlist playlist = {NULL};
+    ListaOrdenada listaOrdenada;
+    inicializarListaOrdenada(&listaOrdenada);
+    carregarMusicas(&playlist, "musicas.txt", &listaOrdenada);
+
+    Musica *musicaAtual = playlist.cabeca;
+
+    int opcao;
+    do {
+        exibirMenu(musicaAtual);
+        printf("\nEscolha uma opcao: ");
+        scanf("%d", &opcao);
+        getchar();
+
+        switch (opcao) {
+            case 1:
+                printf("\nExibindo a playlist completa:\n\n");
+                exibirPlaylist(&playlist, musicaAtual);
+                break;
+            case 2:
+                printf("\nExibindo a playlist ordenada pelo nome das musicas:\n\n");
+                exibirPlaylistOrdenada(&listaOrdenada, musicaAtual);
+                break;
+            case 3: {
+                char artista[MAX_LEN], nome[MAX_LEN];
+                printf("\nDigite o nome do artista: ");
+                fgets(artista, sizeof(artista), stdin);
+                artista[strcspn(artista, "\n")] = '\0';
+                capitalizar(artista);
+                printf("Digite o nome da musica: ");
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = '\0';
+                capitalizar(nome);
+                inserirMusica(&playlist, &listaOrdenada, artista, nome);
+                break;
+            }
+            case 4: {
+                char nome[MAX_LEN];
+                printf("\nDigite o nome da musica a ser removida: ");
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = '\0';
+                musicaAtual = removerMusica(&playlist, nome, musicaAtual);
+                break;
+            }
+            case 5: {
+                char nome[MAX_LEN];
+                printf("\nDigite o nome da musica a ser buscada: ");
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = '\0';
+                buscarMusica(&playlist, nome);
+                break;
+            }
+            case 6:
+                if (musicaAtual) {
+                    musicaAtual = avancarMusica(musicaAtual);
+                    printf("\nAvancando para a proxima musica.\n\n");
+                } else {
+                    printf("\nNenhuma musica esta tocando no momento.\n\n");
+                }
+                break;
+            case 7:
+                if (musicaAtual) {
+                    musicaAtual = voltarMusica(musicaAtual);
+                    printf("\nRetornando a musica anterior.\n\n");
+                } else {
+                    printf("\nNenhuma musica esta tocando no momento.\n\n");
+                }
+                break;
+            case 0:
+                printf("\nSaindo...\n\n");
+                break;
+            default:
+                printf("\nOpcao invalida.\n\n");
+                break;
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
