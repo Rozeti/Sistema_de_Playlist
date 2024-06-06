@@ -76,3 +76,38 @@ void carregarMusicas(Playlist *playlist, const char* nomeArquivo, ListaOrdenada 
     }
     fclose(arquivo);
 }
+
+void exibirPlaylist(Playlist *playlist, Musica *musicaAtual) {
+    if (!playlist->cabeca) {
+        printf("Playlist vazia.\n");
+        return;
+    }
+    Musica *atual = playlist->cabeca;
+    do {
+        if (atual == musicaAtual) {
+            printf("** %s - %s **\n", atual->artista, atual->nome);
+        } else {
+            printf("%s - %s\n", atual->artista, atual->nome);
+        }
+        atual = atual->proxima;
+    } while (atual != playlist->cabeca);
+    printf("\n");
+}
+
+void exibirPlaylistOrdenada(ListaOrdenada *listaOrdenada, Musica *musicaAtual) {
+    if (!listaOrdenada->cabeca) {
+        printf("Playlist vazia.\n");
+        return;
+    }
+    NoOrdenado *atual = listaOrdenada->cabeca;
+    while (atual) {
+        Musica *musicaAtualOrdenada = atual->musica;
+        if (musicaAtualOrdenada == musicaAtual) {
+            printf("** %s - %s **\n", musicaAtualOrdenada->artista, musicaAtualOrdenada->nome);
+        } else {
+            printf("%s - %s\n", musicaAtualOrdenada->artista, musicaAtualOrdenada->nome);
+        }
+        atual = atual->proximo;
+    }
+    printf("\n");
+}
