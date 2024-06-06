@@ -194,3 +194,34 @@ void inserirMusica(Playlist *playlist, ListaOrdenada *listaOrdenada, char* artis
     salvarNoArquivo(playlist, "musicas.txt");
     printf("Musica inserida com sucesso.\n\n");
 }
+
+Musica* avancarMusica(Musica *musicaAtual) {
+    if (musicaAtual) {
+        return musicaAtual->proxima;
+    }
+    return NULL;
+}
+
+Musica* voltarMusica(Musica *musicaAtual) {
+    if (musicaAtual) {
+        return musicaAtual->anterior;
+    }
+    return NULL;
+}
+
+void exibirMenu(Musica *musicaAtual) {
+    printf("------ Menu ------\n");
+    printf("1. Exibir playlist completa\n");
+    printf("2. Exibir playlist ordenada\n");
+    printf("3. Inserir nova musica\n");
+    printf("4. Remover musica\n");
+    printf("5. Buscar musica\n");
+    printf("6. Avancar musica\n");
+    printf("7. Voltar musica\n");
+    printf("0. Sair\n");
+    if (musicaAtual) {
+        printf("\nMusica atual: %s - %s\n", musicaAtual->artista, musicaAtual->nome);
+    } else {
+        printf("\nNenhuma musica esta tocando no momento.\n");
+    }
+}
