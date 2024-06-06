@@ -111,3 +111,37 @@ void exibirPlaylistOrdenada(ListaOrdenada *listaOrdenada, Musica *musicaAtual) {
     }
     printf("\n");
 }
+
+void capitalizar(char *str) {
+    int proximaMaiuscula = 1;
+    while (*str) {
+        if (isspace(*str)) {
+            proximaMaiuscula = 1;
+        } else if (proximaMaiuscula && isalpha(*str)) {
+            *str = toupper(*str);
+            proximaMaiuscula = 0;
+        } else {
+            *str = tolower(*str);
+        }
+        str++;
+    }
+}
+
+void buscarMusica(Playlist *playlist, char* nome) {
+    if (!playlist->cabeca) {
+        printf("Playlist vazia.\n");
+        return;
+    }
+
+    Musica *atual = playlist->cabeca;
+    do {
+        if (strcasecmp(atual->nome, nome) == 0) {
+            printf("Musica encontrada: %s - %s\n", atual->artista, atual->nome);
+            printf("\n");
+            return;
+        }
+        atual = atual->proxima;
+    } while (atual != playlist->cabeca);
+    printf("Musica nao encontrada.\n");
+    printf("\n");
+}
