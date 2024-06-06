@@ -145,3 +145,52 @@ void buscarMusica(Playlist *playlist, char* nome) {
     printf("Musica nao encontrada.\n");
     printf("\n");
 }
+
+Musica* removerMusica(Playlist *playlist, char* nome, Musica *musicaAtual) {
+    if (!playlist->cabeca) {
+        printf("Playlist vazia.\n");
+        return musicaAtual;
+    }
+
+    Musica *atual = playlist->cabeca;
+    do {
+        if (strcasecmp(atual->nome, nome) == 0) {
+            if (atual->proxima == atual) {
+                free(atual);
+                playlist->cabeca = NULL;
+            } else {
+                atual->anterior->proxima = atual->proxima;
+                atual->proxima->anterior = atual->anterior;
+                if (atual == playlist->cabeca) {
+                    playlist->cabeca = atual->proxima;
+                }
+                free(atual);
+            }
+            salvarNoArquivo(playlist, "musicas.txt");
+            printf("Musica removida com sucesso.\n\n");
+            if (atual == musicaAtual) {
+                musicaAtual = musicaAtual->proxima;
+            }
+            return musicaAtual;
+        }
+        atual = atual->proxima;
+    } while (atual != playlist->cabeca);
+    printf("Musica nao encontrada.\n\n");
+    return musicaAtual;
+}
+
+void inserirMusica(Playlist *playlist, ListaOrdenada *listaOrdenada, char* artista, char* nome) {
+    Musica *novaMusica = criarMusica(artista, nome);
+    inserirNaListaOrdenada(listaOrdenada, novaMusica);
+    if (!playlist->cabeca) {
+        playlist->cabeca = novaMusica;
+    } else {
+        Musica* cauda = playlist->cabeca->anterior;
+        cauda->proxima = novaMusica;
+        novaMusica->anterior = cauda;
+        novaMusica->proxima = playlist->cabeca;
+        playlist->cabeca->anterior = novaMusica;
+    }
+    salvarNoArquivo(playlist, "musicas.txt");
+    printf("Musica inserida com sucesso.\n\n");
+}
